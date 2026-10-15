@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lessoner</title><meta name="description" content="Lessoner: plan, submit, approve and print lesson plans."><link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#edf0f8;--card:rgba(255,255,255,.7);--solid:#fff;--inp:rgba(255,255,255,.85);--ink:#0f1938;--mut:#5b6685;--line:rgba(35,50,120,.12);--pri:#2b3a9e;--btn:linear-gradient(135deg,#2b3a9e,#4559db);--soft:rgba(69,89,219,.1);--acc:#c8913f;--ok:#12804a;--okb:rgba(18,128,74,.12);--bad:#c0392b;--badb:rgba(192,57,43,.1);--wn:#9a650a;--wnb:rgba(214,150,30,.16);--sh:0 10px 34px rgba(28,40,110,.09);--o1:rgba(90,110,240,.22);--o2:rgba(214,160,70,.18);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#070c1c;--card:rgba(24,32,64,.58);--solid:#151c3a;--inp:rgba(10,15,35,.55);--ink:#e8ecfb;--mut:#97a3cb;--line:rgba(150,168,255,.15);--pri:#a5b3ff;--btn:linear-gradient(135deg,#4256d6,#6a7cf5);--soft:rgba(120,140,255,.14);--acc:#e0b060;--ok:#52d08a;--okb:rgba(82,208,138,.14);--bad:#ff8a80;--badb:rgba(255,100,90,.13);--wn:#f0bf5e;--wnb:rgba(240,191,94,.14);--sh:0 10px 34px rgba(0,0,0,.4);--o1:rgba(80,100,255,.2);--o2:rgba(200,150,60,.1);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#070c1c;--card:rgba(24,32,64,.58);--solid:#151c3a;--inp:rgba(10,15,35,.55);--ink:#e8ecfb;--mut:#97a3cb;--line:rgba(150,168,255,.15);--pri:#a5b3ff;--btn:linear-gradient(135deg,#4256d6,#6a7cf5);--soft:rgba(120,140,255,.14);--acc:#e0b060;--ok:#52d08a;--okb:rgba(82,208,138,.14);--bad:#ff8a80;--badb:rgba(255,100,90,.13);--wn:#f0bf5e;--wnb:rgba(240,191,94,.14);--sh:0 10px 34px rgba(0,0,0,.4);--o1:rgba(80,100,255,.2);--o2:rgba(200,150,60,.1);color-scheme:dark}
+*,*:before,*:after{box-sizing:inherit}
+html,body{margin:0}
+html.tt *{transition:background-color .4s,color .4s,border-color .4s!important}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(540px 440px at 6% -4%,var(--o1),transparent 70%),radial-gradient(500px 440px at 100% 104%,var(--o2),transparent 70%)}
+button,input,select,textarea{font:inherit;color:inherit}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes toast{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+main{padding-bottom:104px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:var(--card);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.top h2{margin:0;font:600 19px Fraunces,Georgia,serif;letter-spacing:-.01em}
+.tbr{display:flex;gap:10px;align-items:center}
+.tg{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);display:grid;place-items:center;cursor:pointer;color:var(--ink);transition:transform .2s}.tg:hover{transform:rotate(18deg)}
+.tgf{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:14px;z-index:20}
+.av{width:40px;height:40px;border-radius:12px;background:var(--btn);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;border:0;cursor:pointer;box-shadow:0 4px 14px rgba(55,75,200,.35)}
+.pg{padding:18px 16px;max-width:1120px;margin:auto}
+.side{display:none}
+.bn{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));border-radius:24px;background:var(--card);-webkit-backdrop-filter:blur(22px) saturate(1.6);backdrop-filter:blur(22px) saturate(1.6);border:1px solid var(--line);box-shadow:0 14px 40px rgba(10,20,70,.22);display:flex;padding:6px;gap:2px;z-index:9}
+.bt{flex:1;background:none;border:0;border-radius:18px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:500;color:var(--mut);min-height:52px;padding:7px 2px;position:relative;cursor:pointer;transition:background .25s,color .25s,transform .15s}
+.bt:active{transform:scale(.94)}.bt.on{background:var(--soft);color:var(--pri);font-weight:700}
+.dot{position:absolute;top:4px;right:18%;background:var(--acc);color:#fff;border-radius:9px;font-size:10px;padding:0 5px;font-weight:700}
+.h{font:600 27px/1.2 Fraunces,Georgia,serif;letter-spacing:-.015em;margin:2px 0 14px}
+.mut{color:var(--mut)}.sm{font-size:13px}
+.r{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.c{background:var(--card);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--sh);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s}
+.c.bad{background:var(--badb);color:var(--bad);border-color:transparent;margin-bottom:14px}
+.gr{display:grid;gap:14px}
+.sg4{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}
+.st{display:grid;gap:2px;padding:16px}
+.sti{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;margin-bottom:8px;background:var(--soft);color:var(--pri)}
+.k-w .sti{background:var(--wnb);color:var(--wn)}.k-r .sti{background:var(--badb);color:var(--bad)}.k-g .sti{background:var(--okb);color:var(--ok)}
+.st b{font:600 30px/1.1 Fraunces,Georgia,serif}.st span{font-size:13px;color:var(--mut)}
+.pc{cursor:pointer;display:grid;gap:5px}.pc:hover{transform:translateY(-3px);border-color:rgba(100,120,255,.45);box-shadow:0 16px 40px rgba(28,40,110,.16)}.pc:active{transform:scale(.99)}
+.pl{font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px;white-space:nowrap;background:var(--soft);color:var(--pri)}
+.pl:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px}
+.pl.pending{background:var(--wnb);color:var(--wn)}.pl.revision{background:var(--badb);color:var(--bad)}.pl.final{background:var(--okb);color:var(--ok)}
+.b{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:14px;border:1px solid var(--line);background:var(--card);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font-weight:600;cursor:pointer;transition:transform .15s,box-shadow .25s,filter .2s}
+.b:hover{transform:translateY(-1px);box-shadow:var(--sh)}.b:active{transform:scale(.97)}
+.b.p{background:var(--btn);color:#fff;border-color:transparent;box-shadow:0 8px 22px rgba(55,75,200,.32)}
+.b.ok{background:linear-gradient(135deg,#0f7a45,#21a866);color:#fff;border-color:transparent;box-shadow:0 8px 22px rgba(20,130,75,.3)}
+.b.no{background:var(--badb);color:var(--bad);border-color:transparent}
+.b:disabled{opacity:.6;transform:none}.wide{width:100%;margin-top:12px}
+.fg{display:grid;gap:16px}.f{display:grid;gap:7px}.f>span{font-size:12.5px;font-weight:600;color:var(--mut)}
+input,select,textarea{min-height:50px;width:100%;border:1px solid var(--line);border-radius:14px;padding:11px 14px;background:var(--inp);transition:border-color .2s,box-shadow .2s}
+textarea{min-height:100px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--pri);box-shadow:0 0 0 4px var(--soft)}
+.b:focus-visible,.bt:focus-visible,.ch:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.err{display:none;color:var(--bad);font-size:12px}
+.f.bad input,.f.bad select,.f.bad textarea{border-color:var(--bad);box-shadow:0 0 0 4px var(--badb)}.f.bad .err{display:block}
+.act{position:sticky;bottom:calc(88px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;padding:10px;margin-top:16px;border-radius:20px;background:var(--card);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid var(--line);box-shadow:var(--sh)}.act .b{flex:1;padding:0 10px}
+.act2{display:flex;gap:10px;margin-top:16px}.act2 .b{flex:1}
+.ss{font-size:12px;color:var(--mut)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 16px}
+.ch{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:6px 15px;font-size:13px;font-weight:500;cursor:pointer;min-height:38px;transition:all .2s}.ch.on{background:var(--btn);color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(55,75,200,.28)}
+.em{text-align:center;padding:36px 16px;display:grid;gap:8px;justify-items:center}
+.eic{width:56px;height:56px;border-radius:18px;background:var(--soft);color:var(--pri);display:grid;place-items:center}
+.vw{display:grid;gap:18px}.vw>.sd{display:grid;gap:14px;align-content:start}
+.sd ul{margin:8px 0 0;padding-left:18px;font-size:13px;display:grid;gap:8px}
+.docbox{overflow:hidden;padding-bottom:40px;animation:pop .7s cubic-bezier(.2,.8,.2,1) both}
+.lk{background:none;border:0;color:var(--pri);font-weight:600;padding:8px 0;cursor:pointer;min-height:40px}
+.mg{display:grid;gap:14px}.mg.hasm .ml{display:none}.ml{display:grid;gap:10px;align-content:start}
+.mi{cursor:pointer;display:block;text-align:left;width:100%}.mi:hover{transform:translateX(3px)}.mi.un{border-left:4px solid var(--acc)}.mi.un b{color:var(--pri)}
+.mb{margin:16px 0;line-height:1.7}
+.sigp{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:10px;margin:10px 0;display:inline-block}.sigp img{height:60px;display:block}
+.ov{position:fixed;inset:0;background:rgba(6,10,28,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;z-index:50;animation:fade .25s}
+.sheet{background:var(--solid);border:1px solid var(--line);width:100%;max-width:460px;border-radius:26px 26px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom,0px));max-height:90vh;overflow:auto;box-shadow:0 -10px 50px rgba(0,0,0,.25);animation:up .4s cubic-bezier(.2,.9,.3,1)}
+.sheet h3{margin:0 0 6px;font:600 20px Fraunces,Georgia,serif}
+#toast{position:fixed;left:14px;right:14px;bottom:calc(98px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;z-index:60;pointer-events:none}
+.ts{background:var(--solid);color:var(--ink);border:1px solid var(--line);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);padding:13px 16px;border-radius:14px;font-size:14px;font-weight:500;box-shadow:0 12px 34px rgba(10,20,70,.25);border-left:5px solid var(--pri);animation:toast .45s cubic-bezier(.2,.9,.3,1)}.ts.ok{border-left-color:#2fb870}.ts.err{border-left-color:#e55}
+.lg{min-height:100vh;display:grid;align-content:start}
+.lb{background:#0e1647;color:#fff;padding:28px 22px 56px;position:relative;overflow:hidden}
+.lb:before,.lb:after{content:"";position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}.lb:before{width:300px;height:300px;background:rgba(90,110,255,.55);top:-110px;right:-70px}.lb:after{width:240px;height:240px;background:rgba(214,160,70,.32);bottom:-100px;left:-60px}
+.lb>div{position:relative;animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+.lb h1{margin:12px 0 4px;font:600 30px Fraunces,Georgia,serif;letter-spacing:-.01em}.tag{margin:0;color:#ecc794;font-size:14px;letter-spacing:.2px}.lb ul{display:none}
+.mk{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.lf{padding:0 16px 32px;position:relative}
+.lc{max-width:430px;margin:-30px auto 0;padding:24px 20px;background:var(--solid);animation:pop .8s .15s cubic-bezier(.2,.8,.2,1) both}.lc h2{margin:0;font:600 24px Fraunces,Georgia,serif}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border-radius:14px;padding:4px;margin:16px 0}.tabs button{border:0;background:none;min-height:42px;border-radius:11px;font-weight:600;cursor:pointer;color:var(--mut);transition:all .25s}.tabs .on{background:var(--solid);color:var(--pri);box-shadow:0 2px 10px rgba(20,30,90,.15)}
+.doc{width:794px;min-height:1123px;background:#fff;color:#161a2b;padding:48px 54px 92px;font:13px/1.55 Georgia,"Times New Roman",serif;zoom:var(--z,1);position:relative;box-sizing:border-box;border-radius:3px;box-shadow:0 20px 60px rgba(10,20,80,.28)}
+.doc:before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:linear-gradient(90deg,#1b2563,#4559db 70%,#c8913f)}
+.dh{display:flex;gap:18px;align-items:center;padding-bottom:14px;border-bottom:3px double #1b2563}
+.logo{width:68px;height:68px;border-radius:50%;background:#1b2563;color:#f0d9ad;display:grid;place-items:center;font:700 17px system-ui;box-shadow:0 0 0 3px #fff,0 0 0 5px #c8913f}
+.dh h1{margin:0;font:700 22px Fraunces,Georgia,serif;color:#1b2563}.dh p{margin:3px 0 0;font:12px system-ui;color:#555}
+.dt{text-align:center;margin:16px 0;font:600 12.5px system-ui;letter-spacing:2px;color:#1b2563}
+.doc table{width:100%;border-collapse:collapse;margin-bottom:14px}.doc td{border:1px solid #d3d7e6;padding:7px 10px;vertical-align:top}.doc td.k{background:#f2f4fb;width:19%;font:600 11.5px system-ui;color:#2b3350}
+.sec{margin-bottom:10px}.sec h4{margin:0 0 4px;font:700 11.5px system-ui;color:#1b2563;border-bottom:1px solid #dfe2ee;padding-bottom:3px}.sec div{white-space:pre-wrap}
+.sg{display:flex;gap:44px;margin-top:30px}.sg>div{flex:1;text-align:center;font-size:12px}
+.sl{height:72px;display:flex;align-items:flex-end;justify-content:center;border-bottom:1px solid #333;margin-bottom:5px}.sl img{max-height:64px;max-width:100%}.sl i{color:#999;font-size:11px}
+.sl .ts2{font:italic 26px "Brush Script MT",cursive;color:#1b2563}
+.ap{margin-top:18px;border:1px solid #b9dfc7;background:#f1faf4;border-radius:6px;padding:9px 13px;font:12px system-ui}.ap.pn{border-color:#e6d6a8;background:#fdf8e8}
+.seal{position:absolute;right:58px;bottom:96px;width:100px;height:100px;border-radius:50%;border:3px double #12804a;color:#12804a;display:grid;place-content:center;text-align:center;transform:rotate(-14deg);font:700 12px system-ui;letter-spacing:1px;opacity:.8}.seal span{font-size:10px;font-weight:600;letter-spacing:0}
+.ft{position:absolute;left:54px;right:54px;bottom:26px;font:10.5px system-ui;color:#666;display:flex;justify-content:space-between;border-top:1px solid #ccc;padding-top:7px}
+@media(min-width:700px){.gr{grid-template-columns:repeat(2,1fr)}.sg4{grid-template-columns:repeat(4,1fr)}.fg{grid-template-columns:1fr 1fr}.f.full{grid-column:1/-1}.ov{align-items:center}.sheet{border-radius:26px;animation:pop .4s cubic-bezier(.2,.9,.3,1)}}
+@media(min-width:900px){
+.side{display:flex;flex-direction:column;position:fixed;inset:0 auto 0 0;width:248px;background:linear-gradient(180deg,#141d57,#0b1136);color:#fff;padding:22px 14px;z-index:6;border-right:1px solid rgba(255,255,255,.08)}
+main{margin-left:248px;padding-bottom:32px}.bn{display:none}.pg{padding:26px 30px}#toast{bottom:22px;left:auto;right:22px;width:340px}
+.brand{display:flex;gap:10px;align-items:center;font:600 19px Fraunces,Georgia,serif;padding:4px 10px 22px}
+.sb{display:flex;gap:12px;align-items:center;background:none;border:0;color:#bcc4ee;padding:12px 14px;border-radius:14px;cursor:pointer;text-align:left;position:relative;margin-bottom:2px;transition:all .25s}.sb:hover{background:rgba(255,255,255,.07);color:#fff}.sb.on{background:rgba(255,255,255,.12);color:#fff;font-weight:600;box-shadow:inset 3px 0 0 #e0b060}.sb .dot{position:static;margin-left:auto}
+.sp{flex:1}.who{display:grid;gap:4px;padding:12px;font-size:14px;background:rgba(255,255,255,.06);border-radius:16px}.who .mut{color:#aab3e8}.who .b{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.15);margin-top:6px}
+.vw{grid-template-columns:minmax(0,1fr) 310px}.vw>.sd{order:2}.vw>.docbox{order:1}
+.mg{grid-template-columns:350px 1fr}.mg.hasm .ml{display:grid}.back{display:none}
+.act{bottom:14px}.lg{grid-template-columns:1.1fr 1fr;align-content:stretch}.lb{padding:72px 64px;display:flex;align-items:center}.lb h1{font-size:46px}.lb ul{display:grid;gap:16px;margin:34px 0 0;padding:0;color:#d5daf5;font-size:16px}.lb li{list-style:none;position:relative;padding-left:34px}.lb li:before{content:"";position:absolute;left:0;top:50%;width:20px;height:20px;margin-top:-10px;border-radius:50%;border:2px solid #e0b060;box-shadow:inset 0 0 0 4px #0e1647,inset 0 0 0 20px rgba(224,176,96,.7)}.lf{display:grid;place-items:center;padding:32px}.lc{margin:0;width:100%}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+@media print{@page{size:A4 portrait;margin:0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body:before{display:none}body *{visibility:hidden}.doc,.doc *{visibility:visible}.doc{position:absolute;left:0;top:0;zoom:1!important;width:210mm;min-height:297mm;box-shadow:none;border-radius:0}body{background:#fff}.docbox{overflow:visible;animation:none}}
+/* ===== motion layer ===== */
+:root{--e1:cubic-bezier(.22,1,.36,1);--e2:cubic-bezier(.34,1.56,.64,1);--e3:cubic-bezier(.65,0,.35,1)}
+html{-webkit-tap-highlight-color:transparent}
+body:before{display:none}
+#bg{position:fixed;inset:-14vh 0;z-index:-1;pointer-events:none;will-change:transform}
+#bg i{position:absolute;border-radius:50%;will-change:transform}
+#bg i:first-child{width:78vmax;height:78vmax;left:-26vmax;top:-30vmax;background:radial-gradient(circle,var(--o1),transparent 66%);animation:drift 26s ease-in-out infinite alternate}
+#bg i:last-child{width:70vmax;height:70vmax;right:-24vmax;bottom:-30vmax;background:radial-gradient(circle,var(--o2),transparent 66%);animation:drift2 32s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate3d(9vmax,7vmax,0) scale(1.12)}}
+@keyframes drift2{to{transform:translate3d(-8vmax,-6vmax,0) scale(1.15)}}
+.pg.out{opacity:0;transform:translateY(-10px) scale(.992);transition:opacity .16s ease-in,transform .16s ease-in;pointer-events:none}
+.rv{opacity:0;transform:translateY(24px) scale(.985);transition:opacity .75s var(--e1),transform .9s var(--e1)}
+.rv.vis{opacity:1;transform:none}
+.sw{animation:ttl .6s var(--e1)}@keyframes ttl{from{opacity:0;transform:translateY(10px)}}
+.top{transition:box-shadow .35s,background-color .4s}.top.sc{box-shadow:0 10px 34px rgba(10,20,70,.14)}
+#app.shell main{animation:shin .9s var(--e1) both}@keyframes shin{from{opacity:0;transform:translateY(16px)}}
+#app.shell .bn{animation:dock 1s .1s var(--e2) both}@keyframes dock{from{opacity:0;transform:translateY(90px) scale(.96)}}
+#app.shell .side{animation:sidein .9s var(--e1) both}@keyframes sidein{from{opacity:0;transform:translateX(-30px)}}
+.bt,.sb{position:relative;overflow:hidden;isolation:isolate}
+.bt.on{background:transparent}.sb.on{background:transparent;box-shadow:none}
+.pill{position:absolute;inset:0;border-radius:inherit;z-index:-1}
+.bt .pill{background:var(--soft)}.sb .pill{background:rgba(255,255,255,.12);box-shadow:inset 3px 0 0 #e0b060}
+.bt svg,.sb svg{transition:transform .45s var(--e2)}.bt.on svg{transform:translateY(-1px) scale(1.12)}
+#app.nvg .on svg{animation:ico .65s var(--e2)}@keyframes ico{0%{transform:scale(.6) rotate(-12deg)}60%{transform:scale(1.28)}100%{transform:scale(1.12)}}
+.b,.ch,.tabs button,.pc,.mi{position:relative;overflow:hidden}
+.rp{position:absolute;border-radius:50%;background:currentColor;opacity:.2;transform:scale(0);animation:rp .7s var(--e1) forwards;pointer-events:none}
+@keyframes rp{to{transform:scale(1);opacity:0}}
+.b,.ch,.tg,.av{transition:transform .55s var(--e2),box-shadow .3s var(--e1),background-color .3s,filter .3s,border-color .3s,color .3s}
+.b:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(28,40,110,.18)}
+.b:active,.ch:active,.tg:active,.av:active{transform:scale(.94);transition-duration:.12s}
+.av:hover{transform:scale(1.07)}
+.b.p:before{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.3) 50%,transparent 65%);transform:translateX(-130%);pointer-events:none}
+.b.p:hover:before{transform:translateX(130%);transition:transform .9s var(--e1)}
+.b:disabled:after{content:"";width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin2 .7s linear infinite}
+@keyframes spin2{to{transform:rotate(360deg)}}
+.tg svg{animation:tgi .7s var(--e2)}@keyframes tgi{from{transform:rotate(-120deg) scale(.3);opacity:0}}
+.pc{transition:transform .5s var(--e1),box-shadow .4s var(--e1),border-color .3s}
+.pc:hover{transform:translateY(-4px) scale(1.004)}.pc:active{transform:scale(.985);transition-duration:.12s}
+.mi:hover{transform:translateX(4px)}
+.f>span{transition:color .25s,transform .35s var(--e1)}.f:focus-within>span{color:var(--pri);transform:translateX(2px)}
+.f.bad,.shake{animation:nudge .5s var(--e1)}
+@keyframes nudge{20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+.ss.ok{animation:savd 1s var(--e1)}@keyframes savd{0%{color:var(--ok);transform:scale(1.15)}100%{transform:none}}
+.pl.pending:before{animation:pulse 1.8s ease-in-out infinite}@keyframes pulse{50%{opacity:.35;transform:scale(1.5)}}
+.dot{animation:ring 2.2s infinite}@keyframes ring{0%{box-shadow:0 0 0 0 rgba(201,138,59,.6)}70%,100%{box-shadow:0 0 0 8px rgba(201,138,59,0)}}
+.st b{font-variant-numeric:tabular-nums}.sti{transition:transform .5s var(--e2)}.st:hover .sti{transform:rotate(-8deg) scale(1.12)}
+.ov{animation:fadeb .35s var(--e1)}@keyframes fadeb{from{opacity:0}}
+.sheet{animation:sheet .6s var(--e1)}@keyframes sheet{from{opacity:0;transform:translateY(70px) scale(.97)}}
+.sheet>*{animation:rise .55s var(--e1) both}.sheet>:nth-child(2){animation-delay:.06s}.sheet>:nth-child(3){animation-delay:.12s}.sheet>:nth-child(4){animation-delay:.18s}.sheet>:nth-child(5){animation-delay:.24s}
+.ov.x{animation:fadeo .22s var(--e3) forwards;pointer-events:none}.ov.x .sheet{animation:sheeto .26s var(--e3) forwards}.ov.x .sheet>*{animation:none}
+@keyframes fadeo{to{opacity:0}}@keyframes sheeto{to{opacity:0;transform:translateY(40px) scale(.97)}}
+.ts{position:relative;overflow:hidden;animation:toast .6s var(--e2)}
+.ts:after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--pri);opacity:.35;transform-origin:left;animation:bar 2.8s linear forwards}
+.ts.ok:after{background:#2fb870}.ts.err:after{background:#e55}
+.ts.o{animation:toasto .32s var(--e3) forwards}@keyframes bar{to{transform:scaleX(0)}}@keyframes toasto{to{opacity:0;transform:translateY(12px) scale(.95)}}
+.docbox{animation:docin 1s var(--e1) both}@keyframes docin{from{opacity:0;transform:translateY(34px) scale(.97)}}
+.sl img{animation:ink 1.3s .6s var(--e3) both}@keyframes ink{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.seal{animation:stamp .8s .9s var(--e2) both}@keyframes stamp{from{opacity:0;transform:rotate(-14deg) scale(2.6)}60%{opacity:.9}to{opacity:.8;transform:rotate(-14deg) scale(1)}}
+.mg.hasm>.c{animation:slr .6s var(--e1) both}@keyframes slr{from{opacity:0;transform:translateX(26px)}}
+.tabs{position:relative}
+.tabs:before{content:"";position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:11px;background:var(--solid);box-shadow:0 2px 10px rgba(20,30,90,.18);transition:transform .55s var(--e2)}
+.tabs[data-t="teacher"]:before{transform:translateX(100%)}
+.tabs button{z-index:1}.tabs .on{background:none;box-shadow:none;color:var(--pri)}
+.lc>*{animation:rise .8s var(--e1) both;animation-delay:.2s}
+.lc>:nth-child(2){animation-delay:.26s}.lc>:nth-child(3){animation-delay:.32s}.lc>:nth-child(4){animation-delay:.38s}.lc>:nth-child(6){animation-delay:.46s}.lc>:nth-child(7){animation-delay:.52s}.lc>:nth-child(8){animation-delay:.58s}
+.lc.shake{animation:nudge .5s var(--e1)}
+.lb:before,.lb:after{animation:drift 16s ease-in-out infinite alternate}
+.lb li{animation:rise .8s var(--e1) both}.lb li:nth-child(1){animation-delay:.5s}.lb li:nth-child(2){animation-delay:.65s}.lb li:nth-child(3){animation-delay:.8s}
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-old(root){z-index:1}::view-transition-new(root){z-index:2}
+@media print{#bg{display:none}.docbox,.sl img,.seal{animation:none!important}.rv{opacity:1!important;transform:none!important}}
+
+/* ===== login hero: aurora, live preview card, glass form ===== */
+@property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes aur1{to{transform:translate3d(-60px,90px,0) scale(1.25)}}@keyframes aur2{to{transform:translate3d(90px,-70px,0) scale(1.3)}}@keyframes aur3{to{transform:translate3d(-80px,-60px,0) scale(.8)}}
+@keyframes wr{from{opacity:0;transform:translateY(16px);filter:blur(6px)}}@keyframes shn{to{background-position:-250% 0}}@keyframes ping{from{opacity:.8;transform:scale(1)}to{opacity:0;transform:scale(1.7)}}
+@keyframes flt{50%{transform:translateY(-12px)}}@keyframes flt2{50%{translate:0 -8px}}@keyframes swp{40%,100%{transform:translateX(100%)}}@keyframes skl{to{background-position:-200% 0}}@keyframes angm{to{--ang:360deg}}
+@keyframes p1{0%,26%{opacity:1;transform:none}30%,100%{opacity:0;transform:translateY(-6px)}}
+@keyframes p2{0%,26%{opacity:0;transform:translateY(6px)}30%,50%{opacity:1;transform:none}54%,100%{opacity:0;transform:translateY(-6px)}}
+@keyframes p3{0%,50%{opacity:0;transform:translateY(6px)}54%,94%{opacity:1;transform:none}98%,100%{opacity:0}}
+@keyframes sgd{0%,54%{stroke-dashoffset:1}72%,94%{stroke-dashoffset:0}100%{stroke-dashoffset:1}}
+@keyframes stp{0%,73%{opacity:0;transform:rotate(-12deg) scale(2.2)}78%{opacity:.9;transform:rotate(-12deg) scale(1)}94%{opacity:.9;transform:rotate(-12deg)}98%,100%{opacity:0;transform:rotate(-12deg)}}
+@keyframes c1k{0%,28%{opacity:0;transform:translateY(10px)}34%,50%{opacity:1;transform:none}56%,100%{opacity:0;transform:translateY(-8px)}}
+@keyframes c2k{0%,74%{opacity:0;transform:translateY(10px)}80%,94%{opacity:1;transform:none}99%,100%{opacity:0;transform:translateY(-8px)}}
+.lb{background:radial-gradient(120% 90% at 0% 0%,#1b2a8c,#0e1647 55%,#0a1036)}
+.lb:before{animation:aur1 16s ease-in-out infinite alternate}.lb:after{animation:aur2 20s ease-in-out infinite alternate}
+.lb .a3{position:absolute;width:260px;height:260px;border-radius:50%;filter:blur(70px);background:rgba(130,90,255,.4);left:34%;top:38%;pointer-events:none;animation:aur3 18s ease-in-out infinite alternate}
+.lb .dg{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.14) 1px,transparent 1.3px);background-size:24px 24px;-webkit-mask-image:radial-gradient(75% 65% at 30% 40%,#000,transparent);mask-image:radial-gradient(75% 65% at 30% 40%,#000,transparent);animation:fade 2s both}
+.mk{position:relative}.mk:after{content:"";position:absolute;inset:-1px;border-radius:inherit;border:1px solid rgba(236,199,148,.7);animation:ping 3.2s ease-out infinite}
+.lb h1{background:linear-gradient(180deg,#fff 30%,#bcc7ff);-webkit-background-clip:text;background-clip:text;color:transparent;animation:wr 1s .15s var(--e1) both}
+.tag{display:flex;flex-wrap:wrap;gap:0 .4em}.tag b{font-weight:600;display:inline-block;background:linear-gradient(100deg,#e6bf84 25%,#fff 45%,#e6bf84 65%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:wr .9s calc(.4s + var(--i)*.13s) var(--e1) both,shn 6s 2.4s linear infinite}
+.hs{display:none;margin:16px 0 0;max-width:34ch;color:#c7cdf0;font-size:16px;line-height:1.65;animation:wr 1s .95s var(--e1) both}
+.mock{display:none;--cy:9s;position:relative;width:min(400px,100%);translate:calc(var(--px,0)*-16px) calc(var(--py,0)*-12px);transition:translate .5s var(--e1);animation:rise 1s .6s var(--e1) both}
+.mi2{position:relative;animation:flt 7s ease-in-out infinite}
+.mc{position:relative;overflow:hidden;padding:20px;border-radius:22px;color:#fff;background:linear-gradient(145deg,rgba(255,255,255,.18),rgba(255,255,255,.06));-webkit-backdrop-filter:blur(20px) saturate(1.6);backdrop-filter:blur(20px) saturate(1.6);border:1px solid rgba(255,255,255,.25);box-shadow:0 30px 70px rgba(4,8,40,.5),inset 0 1px 0 rgba(255,255,255,.35)}
+.mc:before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.15) 50%,transparent 65%);transform:translateX(-100%);animation:swp 6s 1.6s ease-in-out infinite}
+.mh{display:flex;gap:12px;align-items:center}.mh>div{flex:1;line-height:1.25}.mh small{display:block;color:#b9c2f0;font-size:12px}
+.lg2{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#e0b060,#f3d49a);color:#0e1647;display:grid;place-items:center;font:700 16px Fraunces,Georgia,serif}
+.pls{position:relative;width:82px;height:26px}.pls em{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:600;border-radius:99px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
+.pls .p1{animation:p1 var(--cy) infinite}.pls .p2{opacity:0;color:#ffd9a0;animation:p2 var(--cy) infinite}.pls .p3{opacity:0;color:#9ff0c4;animation:p3 var(--cy) infinite}
+.sk{margin:20px 0 4px}.sk u{display:block;height:8px;border-radius:6px;margin-top:12px;background:linear-gradient(90deg,rgba(255,255,255,.1),rgba(255,255,255,.3),rgba(255,255,255,.1));background-size:200% 100%;animation:skl 2.4s linear infinite}.sk u:nth-child(1){width:92%}.sk u:nth-child(2){width:78%}.sk u:nth-child(3){width:58%}
+.sg2{display:flex;align-items:flex-end;justify-content:space-between;margin-top:18px;color:#b9c2f0;font-size:11px;letter-spacing:.1em;text-transform:uppercase}.sg2 svg{width:112px;height:44px;fill:none;stroke:#f1cf92;stroke-width:2.2;stroke-linecap:round}.sg2 path{stroke-dasharray:1;stroke-dashoffset:0;animation:sgd var(--cy) infinite}
+.stp{position:absolute;right:20px;bottom:46px;border:2px solid #9ff0c4;color:#9ff0c4;padding:1px 10px;border-radius:8px;font-size:12px;font-weight:700;line-height:1.7;letter-spacing:.14em;opacity:0;transform:rotate(-12deg);animation:stp var(--cy) infinite}
+.chip{position:absolute;display:flex;gap:8px;align-items:center;padding:9px 14px;border-radius:14px;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;background:rgba(255,255,255,.15);-webkit-backdrop-filter:blur(16px) saturate(1.6);backdrop-filter:blur(16px) saturate(1.6);border:1px solid rgba(255,255,255,.26);box-shadow:0 14px 34px rgba(4,8,40,.4)}
+.chip svg{width:16px;height:16px}.c1{right:-26px;top:-20px;animation:c1k var(--cy) infinite,flt2 5s ease-in-out infinite}.c2{left:-30px;bottom:-18px;color:#bff5d6;animation:c2k var(--cy) infinite,flt2 6s 1s ease-in-out infinite reverse}
+.lc{position:relative;background:color-mix(in srgb,var(--solid) 90%,transparent);-webkit-backdrop-filter:blur(22px) saturate(1.6);backdrop-filter:blur(22px) saturate(1.6);box-shadow:0 24px 60px rgba(10,20,80,.22),inset 0 1px 0 rgba(255,255,255,.4)}
+.lc:after{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;background:conic-gradient(from var(--ang),transparent 0 62%,rgba(120,140,255,.85) 80%,rgba(224,176,96,.9) 90%,transparent);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);mask-composite:exclude;animation:angm 7s linear infinite}
+.lc .b.p{position:relative;overflow:hidden}.lc .b.p:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.38) 50%,transparent 70%);transform:translateX(-120%);transition:transform .8s var(--e1)}.lc .b.p:hover:before{transform:translateX(120%)}
+.f>span{transition:color .2s}.f:focus-within>span{color:var(--pri)}
+@media(min-width:900px){.lb{flex-direction:column;align-items:flex-start;justify-content:center;gap:56px}.lb ul{display:none}.hs,.mock{display:block}}
+.sm2{min-height:42px;padding:0 16px;font-size:14px;white-space:nowrap}
+.tc{padding:16px}.th{display:flex;gap:14px;align-items:center}.ta{flex:none;width:48px;height:48px;border-radius:15px;background:var(--btn);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px;box-shadow:0 6px 16px rgba(55,75,200,.3)}
+.ti{min-width:0;display:grid;gap:2px}.ti b{font-size:16px}.tm{color:var(--mut);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tt{display:flex;gap:10px;align-items:center;margin-top:4px;flex-wrap:wrap}
+.tx{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}.tx .b{min-height:42px;padding:0 10px;font-size:14px;margin:0}
+/* ===== inner screens: same glass + aurora language as the login ===== */
+@keyframes flt3{50%{transform:translateY(-4px)}}
+.hero{position:relative;overflow:hidden;border-radius:24px;padding:22px 20px;margin-bottom:16px;color:#fff;background:radial-gradient(120% 120% at 0% 0%,#1b2a8c,#0e1647 60%,#0a1036);box-shadow:0 18px 44px rgba(20,30,110,.28),inset 0 1px 0 rgba(255,255,255,.18)}
+.hero>i{position:absolute;border-radius:50%;filter:blur(50px);pointer-events:none}.hero>i:first-child{width:220px;height:220px;background:rgba(90,110,255,.55);top:-90px;right:-50px;animation:aur1 16s ease-in-out infinite alternate}.hero>i:nth-child(2){width:180px;height:180px;background:rgba(214,160,70,.32);bottom:-90px;left:-40px;animation:aur2 20s ease-in-out infinite alternate}
+.hx{position:relative}.hk{color:#ecc794;font-size:13px;letter-spacing:.2px;animation:wr .9s .15s var(--e1) both}
+.hero h1{margin:4px 0 0;font:600 28px/1.15 Fraunces,Georgia,serif;background:linear-gradient(180deg,#fff 30%,#bcc7ff);-webkit-background-clip:text;background-clip:text;color:transparent;animation:wr 1s .25s var(--e1) both}
+.hp{display:inline-flex;gap:8px;align-items:center;margin-top:14px;padding:8px 14px;border-radius:99px;font-size:13px;font-weight:600;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);animation:wr .9s .45s var(--e1) both}.hp i{width:8px;height:8px;border-radius:50%;background:#e0b060;animation:pulse 1.8s ease-in-out infinite}
+.hero .b.p{margin:14px 0 0;background:linear-gradient(135deg,#f3d49a,#e0b060);color:#171c45;box-shadow:0 10px 26px rgba(224,176,96,.35);animation:wr .9s .45s var(--e1) both}
+.c{position:relative}.c:before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .4s;background:radial-gradient(260px circle at var(--mx,50%) var(--my,0%),rgba(120,140,255,.17),transparent 65%)}
+@media(hover:hover){.c:hover:before{opacity:1}.st:hover{transform:translateY(-3px);box-shadow:0 16px 38px rgba(28,40,110,.14)}}
+.b.p{position:relative;overflow:hidden}.b.p:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.36) 50%,transparent 70%);transform:translateX(-120%);transition:transform .8s var(--e1)}.b.p:hover:before{transform:translateX(120%)}
+.hero .b.p:before{animation:swp2 7s 1.8s ease-in-out infinite;transition:none}@keyframes swp2{0%{transform:translateX(-120%)}22%,100%{transform:translateX(120%)}}
+.eic{animation:flt3 4.5s ease-in-out infinite}
+.side{overflow:hidden}.side>*{position:relative}.side:before,.side:after{content:"";position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}.side:before{width:230px;height:230px;background:rgba(90,110,255,.38);top:-70px;left:-70px;animation:aur1 18s ease-in-out infinite alternate}.side:after{width:200px;height:200px;background:rgba(214,160,70,.2);bottom:-70px;right:-80px;animation:aur2 22s ease-in-out infinite alternate}
+.sb svg{transition:transform .4s var(--e2)}.sb:hover svg{transform:translateX(3px)}
+.hk{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.hero h1{margin:6px 0 0;font-size:30px;line-height:1.2;padding-bottom:.1em;text-wrap:balance;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.hero h1.hm{font-size:25px}.hero h1.hs2{font-size:21px}
+.hsub{margin:8px 0 0;color:#c7cdf0;font-size:13.5px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;animation:wr .9s .35s var(--e1) both}
+.hero .hp,.hero .b.p{margin-top:18px}
+@media(min-width:900px){.hero{padding:28px 30px}.hero h1{font-size:36px}.hero h1.hm{font-size:30px}.hero h1.hs2{font-size:25px}}
+</style></head>
+<body><div id="bg"><i></i><i></i></div><div id="app"></div><div id="toast"></div><div id="modal"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+/* ===== Lessoner config: set mailEndpoint to a server URL to send real emails (see README) ===== */
+const CFG={from:'no-reply@lessoner.app',mailEndpoint:''};
+const SES=(d=>{const y=d.getMonth()>=3?d.getFullYear():d.getFullYear()-1;return y+'–'+String(y+1).slice(2)})(new Date());
+const rs=()=>Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');
+const temp=()=>{const a='ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';return Array.from(crypto.getRandomValues(new Uint8Array(10)),b=>a[b%a.length]).join('')};
+async function hp(pw,salt){const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']),b=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:new TextEncoder().encode(salt),iterations:150000},k,256);return Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,'0')).join('')}
+const K='lessoner_db',SK='lessoner_sess',$=s=>document.querySelector(s);
+const IC={home:'M3 11l9-8 9 8M5 10v10h14V10',plus:'M12 5v14M5 12h14',list:'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01',mail:'M3 5h18v14H3zM3 7l9 7 9-7',check:'M5 13l4 4L19 7',users:'M16 20v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 10a4 4 0 100-8 4 4 0 000 8M22 20v-2a4 4 0 00-3-3.9',school:'M3 21h18M5 21V9l7-5 7 5v12M10 21v-6h4v6',hist:'M3 12a9 9 0 109-9M3 4v5h5M12 7v5l3 2',x:'M18 6L6 18M6 6l12 12',print:'M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z',dl:'M12 3v12M7 10l5 5 5-5M5 21h14',edit:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',copy:'M9 9h11v11H9zM5 15V4h11',sun:'M12 17a5 5 0 100-10 5 5 0 000 10zM12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4',moon:'M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z',clock:'M12 7v5l3 2M12 21a9 9 0 100-18 9 9 0 000 18z',up:'M12 21V9M7 14l5-5 5 5M5 3h14',send:'M22 2L11 13M22 2l-7 20-4-9-9-4z'};
+const ic=n=>`<svg class="i" viewBox="0 0 24 24"><path d="${IC[n]}"/></svg>`;
+const E=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sigSVG=n=>'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="240" height="80"><text x="8" y="52" font-family="Brush Script MT,cursive" font-size="42" font-style="italic" fill="#1b2a6b">${n}</text></svg>`);
+const now=()=>new Date().toISOString();
+const fmt=d=>d?new Date(d).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'';
+const fd=d=>d?new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}):'';
+const BL={session:SES,cls:'',sec:'',subject:'',date:'',period:'',duration:'40 min',chapter:'',topic:'',sub:'',prior:'',obj:'',method:'',act:'',tlm:'',assess:'',hw:'',remarks:''};
+const FL=[['session','Academic session','text'],['cls','Class','sel',['6','7','8','9','10','11','12']],['sec','Section','sel',['A','B','C','D']],['subject','Subject','sel',['English','Hindi','Odia','Mathematics','Science','Social Science','Physics','Chemistry','Biology','Computer Science']],['date','Date','date'],['period','Period','sel',['1','2','3','4','5','6','7','8']],['duration','Duration','sel',['30 min','40 min','45 min','80 min']],['chapter','Chapter / Unit','text'],['topic','Topic','text'],['sub','Sub-topic','text'],['prior','Previous knowledge','ta'],['obj','Learning objectives','ta'],['method','Teaching methodology','ta'],['act','Teaching-learning activities','ta'],['tlm','Teaching-learning materials / resources','ta'],['assess','Assessment / evaluation','ta'],['hw','Homework / follow-up','ta'],['remarks','Remarks','ta']];
+const REQ=['cls','sec','subject','date','period','chapter','topic','obj','method','act','assess'];
+const ST={draft:'Draft',pending:'Pending approval',revision:'Needs revision',final:'Finalized'};
+let db,me,T,CF,dirty=0,S={v:'dash',id:null,q:'',flt:'all',tab:'principal',f:{},m:null};
+const pid=n=>'LP-'+new Date().getFullYear()+'-'+String(n).padStart(4,'0');
+function seed(){return {school:null,n:1,users:[],plans:[],mails:[]}}
+function save(){}
+const plan=id=>db.plans.find(p=>p.id===id),princ=()=>db.users.find(u=>u.role=='principal');
+const mine=()=>me.role=='teacher'?db.plans.filter(p=>p.t==me.id):db.plans;
+const pill=s=>`<span class="pl ${s}">${ST[s]}</span>`;
+function hook(to,subject,body){const u=db.users.find(x=>x.id==to);if(!CFG.mailEndpoint||!u)return;try{fetch(CFG.mailEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:u.email,name:u.name,subject,text:body,from:CFG.from,school:db.school.name})}).catch(()=>{})}catch(e){}}
+function mail(to,subject,body,p){return;db.mails.push({id:'m'+Date.now()+Math.random().toString(36).slice(2,5),to,subject,body,pid:p,at:now()})}
+function toast(m,t){const e=document.createElement('div');e.className='ts '+(t||'');e.textContent=m;$('#toast').append(e);setTimeout(()=>{e.classList.add('o');setTimeout(()=>e.remove(),330)},2800)}
+function modal(h){$('#modal').innerHTML=`<div class="ov" onclick="if(event.target==this)closeM()"><div class="sheet">${h}</div></div>`}
+function closeM(){const o=$('#modal .ov');if(!o||(me&&me.must))return;if(RM){o.remove();return}o.classList.add('x');setTimeout(()=>{if(o.isConnected&&o.classList.contains('x'))o.remove()},240)}
+function confirmD(t,m,b,fn){CF=fn;modal(`<h3>${t}</h3><p class="mut">${m}</p><div class="act2"><button class="b" onclick="closeM()">Cancel</button><button class="b p" onclick="closeM();CF()">${b}</button></div>`)}
+let NT;const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function go(v,id){if(dirty)persist();if(v=='new'){S.id=null;S.f={...BL,subject:me.subject||'',date:new Date().toISOString().slice(0,10)};v='form'}
+ const f=()=>{if(v!=S.v){S.q='';S.flt='all';if(v!='mail')S.m=null}S.v=v;S.a=1;if(id!==undefined)S.id=id;render();scrollTo(0,0)};
+ clearTimeout(NT);const pg=$('.pg');if(pg&&!RM){pg.classList.add('out');NT=setTimeout(f,170)}else f()}
+const isDark=()=>{const t=document.documentElement.dataset.theme;return t?t=='dark':matchMedia('(prefers-color-scheme:dark)').matches};
+try{const t=localStorage.getItem('lessoner_th');if(t)document.documentElement.dataset.theme=t}catch(e){}
+function theme(e){const d=document.documentElement,n=isDark()?'light':'dark',ap=()=>{d.dataset.theme=n;try{localStorage.setItem('lessoner_th',n)}catch(x){}document.querySelectorAll('.tg').forEach(b=>b.innerHTML=ic(n=='dark'?'sun':'moon'))};
+ if(!document.startViewTransition||RM){d.classList.add('tt');ap();setTimeout(()=>d.classList.remove('tt'),450);return}
+ const el=(e&&e.currentTarget)||$('.tg'),r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,R=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+ try{const vt=document.startViewTransition(ap);vt.ready.then(()=>d.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${R}px at ${x}px ${y}px)`]},{duration:700,easing:'cubic-bezier(.22,1,.36,1)',pseudoElement:'::view-transition-new(root)'})).catch(()=>{})}catch(z){ap()}}
+function fit(){const c=$('.docbox');if(c)document.documentElement.style.setProperty('--z',Math.min(1,c.clientWidth/794).toFixed(3))}
+addEventListener('resize',fit);
+const empty=(t,s,b)=>`<div class="c em"><div class="eic">${ic('list')}</div><b>${t}</b><p class="mut sm" style="margin:0">${s}</p>${b||''}</div>`;
+/* ---------- login ---------- */
+function login(){const h=login0();return S.setup?h.replace(/<form[\s\S]*<\/form>/,()=>setupForm()):h}
+function login0(){const t=S.tab;return `<div class="lg"><div class="lb"><i class="a3"></i><i class="dg"></i><div class="hc"><div class="mk">${ic('school')}</div><h1>Lessoner</h1><p class="tag"><b style="--i:0">Plan.</b><b style="--i:1">Submit.</b><b style="--i:2">Approve.</b><b style="--i:3">Print.</b></p><p class="hs">From a teacher's first draft to a signed, print-ready A4. One calm workflow.</p></div><div class="mock" aria-hidden="true"><div class="mi2"><div class="mc"><div class="mh"><span class="lg2">L</span><div><b>Lesson Plan</b><small>Class 9 · Science</small></div><span class="pls"><em class="p1">Draft</em><em class="p2">Pending</em><em class="p3">Approved</em></span></div><div class="sk"><u></u><u></u><u></u></div><div class="sg2"><svg viewBox="0 0 90 36"><path pathLength="1" d="M4 26C12 4 18 38 28 18S42 6 50 22S68 30 86 8"/></svg><span>Principal</span></div><div class="stp">APPROVED</div></div><div class="chip c1">${ic('send')}<span>Submitted to Principal</span></div><div class="chip c2">${ic('check')}<span>Approved and signed</span></div></div></div></div>
+<div class="lf"><button type="button" class="tg tgf" aria-label="Toggle dark mode" onclick="theme(event)">${ic(isDark()?'sun':'moon')}</button><form class="c lc" onsubmit="return doLogin(event)"><h2>Sign in</h2><p class="mut sm" style="margin:2px 0 0">Sign in with your school code</p>
+<div class="tabs" data-t="${t}"><button type="button" class="${t=='principal'?'on':''}" onclick="tab('principal')">Principal</button><button type="button" class="${t=='teacher'?'on':''}" onclick="tab('teacher')">Teacher</button></div>
+<div class="fg" style="grid-template-columns:1fr"><label class="f"><span>School code</span><input id="lc" autocomplete="off" autocapitalize="characters"></label><label class="f"><span>Email</span><input id="le" type="email" autocomplete="username"></label><label class="f"><span>Password</span><input id="lp" type="password" autocomplete="current-password"></label></div>
+<div class="c bad" id="lerr" style="display:none;margin:12px 0 0;padding:10px 12px"></div>
+<button class="b p wide" id="lbtn">Sign in</button>${db.school?'':'<p class="sm" style="margin:14px 0 0;text-align:center"><button type="button" class="lk" onclick="setup(1)">New school? Set it up</button></p>'}
+</form></div></div>`}
+async function doLogin(e){e.preventDefault();const c=$('#lc').value.trim().toUpperCase(),em=$('#le').value.trim().toLowerCase(),pw=$('#lp').value,er=$('#lerr'),b=$('#lbtn');
+ const bad=m=>{b.disabled=0;b.textContent='Sign in';er.textContent=m;er.style.display='block';const l=$('.lc');l.classList.remove('shake');void l.offsetWidth;l.classList.add('shake')},WR='Check the school code, email and password, and that the right role tab is selected.';
+ if(!c||!em||!pw){bad('Enter school code, email and password.');return false}
+ if(!sb){bad('Cannot reach the server. Check your connection.');return false}
+ b.disabled=1;b.textContent='Signing in…';er.style.display='none';
+ const {error}=await sb.auth.signInWithPassword({email:em,password:pw});
+ if(error){bad(/confirm/i.test(error.message)?'Confirm your email first, then sign in.':WR);return false}
+ try{try{await hydrate()}catch(x){if(!(await finishSetup()))throw x;await hydrate()}}catch(x){await sb.auth.signOut();bad('No school found for this account.');return false}
+ if(!me||me.role!=S.tab||db.school.code!=c){await sb.auth.signOut();me=null;db=seed();bad(WR);return false}
+ S.v='dash';S.q='';S.flt='all';S.a=1;render();toast('Welcome, '+me.name,'ok');if(me.must)chPw(1);return false}
+
+async function logout(){try{await sb.auth.signOut();sb.removeAllChannels()}catch(e){}RT=0;me=null;db=seed();render()}
+
+/* ---------- shell ---------- */
+function render0(){const a=$('#app');if(!me){a.innerHTML=login();return}
+ const an=S.a;S.a=0;const vw=view(),T2={dash:'Home',form:'Lesson plan',plans:'My plans',hist:'Approval history',view:'Lesson plan',mail:'Email Center',team:'Teachers',school:'School'};
+ const nav=me.role=='teacher'?[['dash','Home','home'],['new','New plan','plus'],['plans','My plans','list'],['mail','Inbox','mail']]:[['dash','Home','home'],['hist','History','hist'],['team','Teachers','users'],['school','School','school'],['mail','Inbox','mail']];
+ const un=db.mails.filter(m=>m.to==me.id&&!m.read).length;
+ const ni=c=>nav.map(([k,l,i])=>`<button class="${c} ${S.v==k||(k=='new'&&S.v=='form')?'on':''}" onclick="go('${k}')">${ic(i)}<span>${l}</span>${k=='mail'&&un?`<b class="dot">${un}</b>`:''}</button>`).join('');
+ a.innerHTML=`<aside class="side"><div class="brand">${ic('school')}<span>Lessoner</span></div>${ni('sb')}<div class="sp"></div><div class="who"><b>${E(me.name)}</b><span class="mut sm">${me.role=='teacher'?'Teacher':'Principal'} · ${E(db.school.code)}</span><button class="b" onclick="logout()">Sign out</button></div></aside>
+ <main><header class="top"><h2>${T2[S.v]}</h2><div class="tbr"><button class="tg" aria-label="Toggle dark mode" onclick="theme(event)">${ic(isDark()?'sun':'moon')}</button><button class="av" aria-label="Sign out" onclick="acct()">${me.name.replace('Dr. ','').split(' ').map(x=>x[0]).join('')}</button></div></header><div class="pg ${an?'in':''}">${vw}</div></main><nav class="bn">${ni('bt')}</nav>`;fit()}
+function view(){return ({dash,form:formV,plans:()=>'<h1 class="h">My plans</h1>'+filters(),hist:()=>'<h1 class="h">Approval history</h1>'+filters(),view:viewV,mail:mailV,team:teamV,school:schoolV})[S.v]()}
+/* ---------- lists ---------- */
+function openP(id){const p=plan(id);if(me.role=='teacher'&&['draft','revision'].includes(p.status))edit(id);else go('view',id)}
+const card=p=>`<div class="c pc" onclick="openP('${p.id}')"><div class="r"><b>${E(p.f.topic||'Untitled plan')}</b>${pill(p.status)}</div><div class="mut sm">Class ${E(p.f.cls||'–')}-${E(p.f.sec||'–')} · ${E(p.f.subject||'Subject')} · ${fd(p.f.date)||'No date'}</div><div class="mut sm">${me.role=='principal'?E(p.tn)+' · ':''}${p.id} · ${fmt(p.updated)}</div></div>`;
+function list(){let L=[...mine()];if(S.v=='hist')L=L.filter(p=>['final','revision'].includes(p.status));const q=S.q.toLowerCase();
+ L=L.filter(p=>(S.flt=='all'||p.status==S.flt)&&(!q||JSON.stringify([p.f.topic,p.f.subject,p.f.chapter,p.tn,p.id,p.f.cls]).toLowerCase().includes(q))).sort((a,b)=>b.updated.localeCompare(a.updated));
+ return L.length?`<div class="gr">${L.map(card).join('')}</div>`:empty('No plans found','Try a different search or filter.')}
+function filters(){const o=me.role=='teacher'?['all','draft','pending','revision','final']:['all','final','revision'];
+ return `<input placeholder="Search topic, subject, class or ID" value="${E(S.q)}" oninput="S.q=this.value;$('#list').innerHTML=list()"><div class="chips">${o.map(k=>`<button class="ch ${S.flt==k?'on':''}" onclick="S.flt='${k}';render()">${k=='all'?'All':ST[k]}</button>`).join('')}</div><div id="list">${list()}</div>`}
+const gr=()=>{const h=new Date().getHours();return h<5?'Good night':h<12?'Good morning':h<17?'Good afternoon':'Good evening'};
+const hero=(g,t,k,x)=>{const n=t.length,c=n<=18?'hl':n<=28?'hm':'hs2';return `<div class="hero"><i></i><i></i><div class="hx"><div class="hk">${g}</div><h1 class="${c}">${t}</h1><div class="hsub">${k}</div>${x}</div></div>`};
+function dash(){const L=mine();
+ if(me.role=='principal'){const pd=L.filter(p=>p.status=='pending').sort((a,b)=>a.updated.localeCompare(b.updated));
+  return `${hero(gr(),E(me.name),E(db.school.name)+' · Session '+SES,'<span class="hp"><i></i>'+(pd.length?pd.length+' awaiting your review':'All caught up')+'</span>')}<div class="sg4"><div class="c st k-w"><div class="sti">${ic('clock')}</div><b>${pd.length}</b><span>Awaiting approval</span></div><div class="c st k-g"><div class="sti">${ic('check')}</div><b>${L.filter(p=>p.status=='final').length}</b><span>Finalized</span></div><div class="c st k-r"><div class="sti">${ic('x')}</div><b>${L.filter(p=>p.status=='revision').length}</b><span>Returned</span></div><div class="c st k-b"><div class="sti">${ic('users')}</div><b>${db.users.filter(u=>u.role=='teacher').length}</b><span>Teachers</span></div></div><h3 style="margin:0 0 10px">Pending your review</h3>`+(pd.length?`<div class="gr">${pd.map(card).join('')}</div>`:empty('All caught up','No lesson plans are waiting for approval.'))}
+ const n=s=>L.filter(p=>p.status==s).length,rv=L.filter(p=>p.status=='revision');
+ return `${hero(gr(),E(me.name),E(db.school.name)+' · Session '+SES,`<button class="b p" onclick="go('new')">${ic('plus')}Create lesson plan</button>`)}
+ <div class="sg4"><div class="c st k-b"><div class="sti">${ic('edit')}</div><b>${n('draft')}</b><span>Drafts</span></div><div class="c st k-w"><div class="sti">${ic('clock')}</div><b>${n('pending')}</b><span>Pending</span></div><div class="c st k-r"><div class="sti">${ic('x')}</div><b>${n('revision')}</b><span>Needs revision</span></div><div class="c st k-g"><div class="sti">${ic('check')}</div><b>${n('final')}</b><span>Finalized</span></div></div>
+ ${rv.map(p=>`<div class="c bad"><b>Returned: ${E(p.f.topic)}</b><br>${E(p.reason)}<br><button class="b" style="margin-top:8px" onclick="edit('${p.id}')">Revise now</button></div>`).join('')}
+ <h3 style="margin:0 0 10px">Recent plans</h3>`+(L.length?`<div class="gr">${[...L].sort((a,b)=>b.updated.localeCompare(a.updated)).slice(0,4).map(card).join('')}</div>`:empty('No lesson plans yet','Create your first plan. It autosaves as you type.',`<button class="b p" onclick="go('new')">Create lesson plan</button>`))}
+/* ---------- form ---------- */
+function formV(){const p=S.id&&plan(S.id),f=S.f;
+ const fld=([k,l,t,o])=>{const v=f[k]||'';const i=t=='ta'?`<textarea name="${k}" rows="3" oninput="inp(this)">${E(v)}</textarea>`:t=='sel'?`<select name="${k}" onchange="inp(this)"><option value="">Select</option>${o.map(x=>`<option ${x==v?'selected':''}>${x}</option>`).join('')}</select>`:`<input name="${k}" type="${t}" value="${E(v)}" oninput="inp(this)">`;
+  return `<label class="f ${t=='ta'||k=='chapter'?'full':''}" id="f_${k}"><span>${l}${REQ.includes(k)?' *':''}</span>${i}<small class="err">This field is required</small></label>`};
+ return `<div class="r"><h1 class="h">${p?'Edit lesson plan':'New lesson plan'}</h1><span class="ss" id="ss">${p?'Saved '+fmt(p.updated):'Not saved yet'}</span></div>`+(p&&p.status=='revision'?`<div class="c bad"><b>Returned by Principal</b><br>${E(p.reason)}</div>`:'')+`<div class="c"><div class="fg">${FL.map(fld).join('')}</div></div><div class="act"><button class="b" onclick="saveD()">Save draft</button><button class="b p" onclick="submit()">${ic('send')}${p&&p.status=='revision'?'Resubmit':'Submit for approval'}</button></div>`}
+function inp(el){S.f[el.name]=el.value;dirty=1;el.closest('.f').classList.remove('bad');$('#ss').textContent='Saving…';clearTimeout(T);T=setTimeout(()=>{persist();const s=$('#ss');if(!s)return;s.textContent='Saved '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});s.classList.remove('ok');void s.offsetWidth;s.classList.add('ok')},700)}
+function persist(){clearTimeout(T);dirty=0;let p=S.id&&plan(S.id);if(!p){p={id:'tmp'+Date.now(),t:me.id,tn:me.name,f:{},status:'draft',reason:'',versions:[{v:1,at:now(),f:{},note:'Draft created'}]};db.plans.push(p);S.id=p.id}
+ p.f={...S.f};p.updated=now();push(p);return p}
+function saveD(){persist();$('#ss').textContent='Saved '+fmt(now());toast('Draft saved','ok')}
+function edit(id){S.id=id;S.f={...plan(id).f};go('form')}
+function reuse(id){const p=plan(id),q={id:'tmp'+Date.now()+'r',t:me.id,tn:me.name,f:{...p.f,date:''},status:'draft',reason:'',updated:now(),versions:[{v:1,at:now(),f:{},note:'Reused from '+p.id}]};db.plans.push(q);push(q);toast('Copied as a new draft','ok');edit(q.id)}
+function submit(){const miss=REQ.filter(k=>!String(S.f[k]||'').trim());FL.forEach(([k])=>$('#f_'+k).classList.toggle('bad',miss.includes(k)));
+ if(miss.length){toast(`Fill ${miss.length} required field${miss.length>1?'s':''} before submitting`,'err');$('#f_'+miss[0]).scrollIntoView({block:'center',behavior:'smooth'});return}
+ confirmD('Submit for approval?','You cannot edit this plan until the Principal responds.','Submit',()=>{const p=persist(),f=p.f;p.status='pending';p.reason='';p.versions.push({v:p.versions.length+1,at:now(),f:{...f},note:'Submitted for approval'});
+  push(p,{status:'pending',reason:''}).then(()=>refresh());toast('Submitted to the Principal','ok');go('view',p.id)})}
+/* ---------- document ---------- */
+function docHTML(p){const f=p.f,s=db.school,a=p.approval,R=(k,l)=>`<div class="sec"><h4>${l}</h4><div>${E(f[k])||'—'}</div></div>`;
+ return `<div class="doc"><div class="dh"><div class="logo">${E(s.name.split(/\s+/).map(w=>w[0]).join('').slice(0,3).toUpperCase())}</div><div><h1>${E(s.name)}</h1><p>${E(s.addr)}</p></div></div><div class="dt">LESSON PLAN · ACADEMIC SESSION ${E(f.session)}</div>
+<table><tr><td class="k">Teacher</td><td>${E(p.tn)}</td><td class="k">Subject</td><td>${E(f.subject)}</td></tr><tr><td class="k">Class / Section</td><td>${E(f.cls)} / ${E(f.sec)}</td><td class="k">Date</td><td>${fd(f.date)}</td></tr><tr><td class="k">Period</td><td>${E(f.period)}</td><td class="k">Duration</td><td>${E(f.duration)}</td></tr><tr><td class="k">Chapter / Unit</td><td colspan="3">${E(f.chapter)}</td></tr><tr><td class="k">Topic</td><td>${E(f.topic)}</td><td class="k">Sub-topic</td><td>${E(f.sub)||'—'}</td></tr></table>
+${R('prior','Previous knowledge')}${R('obj','Learning objectives')}${R('method','Teaching methodology')}${R('act','Teaching–learning activities')}${R('tlm','Teaching-learning materials / resources')}${R('assess','Assessment / evaluation')}${R('hw','Homework / follow-up')}${R('remarks','Remarks')}
+<div class="sg"><div><div class="sl">${['pending','final'].includes(p.status)?`<span class="ts2">${E(p.tn)}</span>`:'<i>Not yet submitted</i>'}</div>Class Teacher<br><b>${E(p.tn)}</b></div><div><div class="sl">${a?`<img src="${a.sig}" alt="Principal signature">`:'<i>Signature appears after approval</i>'}</div>Principal<br><b>${E(a?a.by:princ().name)}</b></div></div>
+${a?`<div class="ap"><b>Approved</b> by ${E(a.by)} on ${fmt(a.at)} · Status: Finalized and locked</div>`:`<div class="ap pn">Status: ${ST[p.status]}. The Principal's signature is added only on approval.</div>`}
+${a?`<div class="seal"><b>APPROVED</b><span>${fd(a.at)}</span></div>`:''}<div class="ft"><span>Document ID: ${p.id}</span><span>${a?'Approved '+fmt(a.at):'Not yet approved'}</span></div></div>`}
+function viewV(){const p=plan(S.id),t=me.role=='teacher';if(!p)return empty('Plan not found','It may have been removed.',`<button class="b p" onclick="go('dash')">Go home</button>`);
+ const A=[];
+ if(t&&['draft','revision'].includes(p.status))A.push(`<button class="b p" onclick="edit('${p.id}')">${ic('edit')}${p.status=='draft'?'Edit draft':'Revise and resubmit'}</button>`);
+ if(!t&&p.status=='pending')A.push(`<button class="b ok" onclick="approve('${p.id}')">${ic('check')}Approve and sign</button>`,`<button class="b no" onclick="reject('${p.id}')">${ic('x')}Return with reason</button>`);
+ if(p.status=='final')A.push(`<button class="b p" onclick="print()">${ic('print')}Print</button>`,`<button class="b" onclick="dl('${p.id}')">${ic('dl')}Download</button>`);
+ if(t)A.push(`<button class="b" onclick="reuse('${p.id}')">${ic('copy')}Reuse as new plan</button>`);
+ return `<button class="lk" onclick="go('${t?'plans':'dash'}')">← Back</button><div class="vw"><div class="sd"><div class="c"><div class="r"><b>${E(p.f.topic||'Untitled')}</b>${pill(p.status)}</div><div class="mut sm">${p.id} · ${E(p.tn)}</div>
+ ${p.status=='revision'?`<div class="c bad" style="margin:10px 0 0"><b>Reason for return</b><br>${E(p.reason)}</div>`:''}${p.approval?`<p class="sm" style="margin:10px 0 0">Approved by <b>${E(p.approval.by)}</b><br>${fmt(p.approval.at)}<br>This version is locked.</p>`:''}
+ ${p.status!='final'?'<p class="mut sm">Print and download unlock after approval.</p>':''}<div class="gr" style="margin-top:12px">${A.join('')}</div></div>
+ <div class="c"><b>Version history</b><ul>${[...p.versions].reverse().map(v=>`<li><b>v${v.v}</b> ${E(v.note)}<br><span class="mut">${fmt(v.at)}</span></li>`).join('')}</ul></div></div><div class="docbox">${docHTML(p)}</div></div>`}
+function dl(id){const p=plan(id),css=$('style').textContent,b=new Blob([`<!doctype html><meta charset="utf-8"><title>${p.id}</title><style>${css}</style><body style="background:#fff">${docHTML(p)}`],{type:'text/html'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=p.id+'.html';a.click();toast('Downloaded. Open it and print to save as PDF.','ok')}
+/* ---------- principal actions ---------- */
+function approve(id){confirmD('Approve this lesson plan?','Your signature will be applied and the document will be finalized and locked.','Approve and sign',async()=>{const p=plan(id),{error}=await sb.rpc('approve_plan',{p_id:p.uid});if(error){toast(error.message,'err');return}await refresh(1);toast('Approved. Signature applied.','ok')})}
+
+function reject(id){modal(`<h3>Return for revision</h3><p class="mut sm">Tell the teacher what to change.</p><textarea id="rr" rows="4" placeholder="Reason (required)"></textarea><small class="err" id="re">Give a clear reason, at least 5 characters.</small><div class="act2"><button class="b" onclick="closeM()">Cancel</button><button class="b no" onclick="doRej('${id}')">Return to teacher</button></div>`)}
+async function doRej(id){const r=$('#rr').value.trim();if(r.length<5){$('#re').style.display='block';return}const p=plan(id),{error}=await sb.rpc('reject_plan',{p_id:p.uid,p_reason:r});closeM();if(error){toast(error.message,'err');return}await refresh(1);toast('Returned to the teacher','ok')}
+
+/* ---------- mail ---------- */
+function mailV(){const L=db.mails.filter(m=>m.to==me.id).sort((a,b)=>b.at.localeCompare(a.at)),m=L.find(x=>x.id==S.m);if(m&&!m.read){m.read=1;sb.from('mails').update({read:true}).eq('id',m.id).then(()=>{})}
+ if(!L.length)return '<h1 class="h">Email Center</h1>'+empty('No emails yet','Simulated approval emails will appear here.');
+ return `<h1 class="h">Email Center</h1><p class="mut sm" style="margin-top:-6px">${CFG.mailEndpoint?'Copies of these messages are also emailed to you.':'In-app messages. Connect an email service to also deliver them to inboxes.'}</p><div class="mg ${m?'hasm':''}"><div class="ml">${L.map(x=>`<button class="c mi ${x.read?'':'un'}" onclick="S.m='${x.id}';render()"><b>${E(x.subject)}</b><br><span class="mut sm">${fmt(x.at)}</span></button>`).join('')}</div>
+ ${m?`<div class="c"><button class="lk back" onclick="S.m=null;render()">← Inbox</button><b style="font-size:17px">${E(m.subject)}</b><div class="mut sm" style="margin-top:6px">From: Lessoner &lt;${E(CFG.from)}&gt;<br>To: ${E(me.name)} &lt;${E(me.email)}&gt;<br>${fmt(m.at)}</div><div class="mb">${E(m.body).replace(/\n/g,'<br>')}</div>${m.pid&&plan(m.pid)?`<button class="b p" onclick="go('view','${m.pid}')">Open document ${m.pid}</button>`:''}</div>`:''}</div>`}
+/* ---------- principal admin ---------- */
+function teamV(){return `<div class="r" style="align-items:center;margin-bottom:14px"><h1 class="h" style="margin:0">Teachers</h1><button class="b p sm2" onclick="addT()">+ Add teacher</button></div><div class="gr">${db.users.filter(u=>u.role=='teacher').map(u=>`<div class="c tc"><div class="th"><span class="ta">${E(u.name.replace('Dr. ','').split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase())}</span><div class="ti"><b>${E(u.name)}</b><span class="tm">${E(u.email)}</span><div class="tt">${u.subject?`<span class="pl">${E(u.subject)}</span>`:''}<span class="mut sm">${db.plans.filter(p=>p.t==u.id).length} plans</span></div></div></div><div class="tx"><button class="b" onclick="resetT('${u.id}')">Reset password</button><button class="b no" onclick="delT('${u.id}')">Remove</button></div></div>`).join('')}</div>`}
+function addT(){modal(`<h3>Add teacher</h3><div class="fg" style="grid-template-columns:1fr"><label class="f"><span>Full name</span><input id="tn"></label><label class="f"><span>Email</span><input id="te" type="email"></label><label class="f"><span>Subject</span><input id="ts"></label></div><small class="err" id="te2"></small><p class="mut sm">A temporary password is generated when you add the teacher.</p><div class="act2"><button class="b" onclick="closeM()">Cancel</button><button class="b p" onclick="saveT()">Add teacher</button></div>`)}
+async function saveT(){const n=$('#tn').value.trim(),e=$('#te').value.trim().toLowerCase(),er=$('#te2');let m='';if(!n||!/^\S+@\S+\.\S+$/.test(e))m='Enter a name and a valid email.';else if(db.users.some(u=>u.email==e))m='That email is already in use.';
+ if(m){er.textContent=m;er.style.display='block';return}
+ const r=await fn({action:'add',name:n,email:e,subject:$('#ts').value.trim()});if(r.error){er.textContent=r.error;er.style.display='block';return}
+ await refresh(1);tpModal(n,r.tempPassword)}
+
+function delT(id){confirmD('Remove this teacher?','They will no longer be able to sign in. Their approved plans stay on record.','Remove',async()=>{const r=await fn({action:'remove',id});if(r.error){toast(r.error,'err');return}await refresh(1);toast('Teacher removed')})}
+
+function schoolV(){const s=db.school;return `<h1 class="h">School information</h1><div class="c"><div class="fg"><label class="f"><span>School name</span><input id="sn" value="${E(s.name)}"></label><label class="f"><span>School code</span><input value="${E(s.code)}" disabled></label><label class="f full"><span>Address</span><textarea id="sa" rows="2">${E(s.addr)}</textarea></label></div><button class="b p wide" onclick="saveS()">Save school information</button></div>
+ <div class="c" style="margin-top:14px"><b>Official signature</b><p class="mut sm" style="margin:4px 0">Applied only when you approve a plan. Changing it never alters documents already approved.</p><div class="sigp"><img src="${s.sig}" alt="Current signature"></div><input type="file" id="sf" accept="image/*" hidden onchange="upSig(this)"><label class="b p wide" for="sf" tabindex="0" onkeydown="if(event.key=='Enter')$('#sf').click()">${ic('up')}Upload signature image</label><p class="mut sm" style="margin:8px 0 0">PNG, JPG or WebP. Use a wide signature (about 3:1; 1.5:1 to 6:1 is accepted) in dark ink on a white or transparent background. The background is removed and the image is trimmed automatically.</p><button class="b wide" onclick="typedSig()">Use typed-name signature</button></div><div class="c" style="margin-top:14px"><b>Backup</b><p class="mut sm" style="margin:4px 0 10px">Your data is stored securely online. You can download a copy anytime.</p><div class="gr"><button class="b p" onclick="bk()">Download backup</button></div></div>`}
+async function saveS(){const n=$('#sn').value.trim(),a=$('#sa').value.trim();if(!n||!a){toast('School name and address are required','err');return}const {error}=await sb.from('schools').update({name:n,addr:a}).eq('id',db.school.id);if(error){toast(error.message,'err');return}db.school.name=n;db.school.addr=a;toast('School information saved','ok')}
+
+let SIGP;
+function sigClean(d,w,h){let n=0,tr=0;const H=new Uint32Array(256);for(let i=0;i<d.length;i+=4){if(d[i+3]<250)tr++;if(d[i+3]>200){H[Math.round(.299*d[i]+.587*d[i+1]+.114*d[i+2])]++;n++}}
+ if(!n||tr>w*h*.01)return 'ok';let c=0,bg=255;for(let v=0;v<256;v++){c+=H[v];if(c>=n*.5){bg=v;break}}
+ if(bg<110)return 'dark';const t1=bg*.86,t0=bg*.5;
+ for(let i=0;i<d.length;i+=4){const l=.299*d[i]+.587*d[i+1]+.114*d[i+2],a=l>=t1?0:l<=t0?255:(t1-l)/(t1-t0)*255;d[i+3]=Math.round(a*d[i+3]/255)}return 'ok'}
+function sigBox(d,w,h){let x0=w,y0=h,x1=-1,y1=-1;for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(d[(y*w+x)*4+3]>70){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}return x1<0?null:{x:x0,y:y0,w:x1-x0+1,h:y1-y0+1}}
+function sigErr(m){modal(`<h3>Signature not accepted</h3><p class="mut">${m}</p><div class="act2"><button class="b p" onclick="closeM()">OK</button></div>`)}
+async function useSig(){const {error}=await sb.from('schools').update({sig:SIGP}).eq('id',db.school.id);if(error){toast(error.message,'err');return}db.school.sig=SIGP;closeM();render();toast('Signature updated for future approvals','ok')}
+
+function upSig(i){const f=i.files[0];i.value='';if(!f)return;
+ if(!/^image\//.test(f.type)){toast('Choose an image file (PNG, JPG or WebP)','err');return}
+ if(f.size>15e6){toast('Image is too large. Use one under 15 MB','err');return}
+ const r=new FileReader();r.onerror=()=>toast('Could not read that file','err');
+ r.onload=()=>{const im=new Image();im.onerror=()=>toast('That image could not be opened','err');
+  im.onload=()=>{const k=Math.min(1,1800/Math.max(im.width,im.height)),w=Math.max(1,Math.round(im.width*k)),h=Math.max(1,Math.round(im.height*k)),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(im,0,0,w,h);
+   const id=x.getImageData(0,0,w,h);if(sigClean(id.data,w,h)=='dark'){sigErr('The background looks dark. Use dark ink on a white or transparent background.');return}x.putImageData(id,0,0);
+   const b=sigBox(id.data,w,h);if(!b||b.w<20||b.h<8){sigErr('No signature ink found. Use dark ink on a plain white background.');return}
+   const q=b.w/b.h;if(q<1.5||q>6){sigErr(`This signature is ${q.toFixed(1)}:1. A typical signature is about 3:1 (1.5:1 to 6:1 is accepted). Crop it closer or photograph it wider.`);return}
+   const p=Math.round(Math.max(b.w,b.h)*.04),s=Math.min(1,600/(b.w+2*p),200/(b.h+2*p)),o=document.createElement('canvas');o.width=Math.round((b.w+2*p)*s);o.height=Math.round((b.h+2*p)*s);
+   o.getContext('2d').drawImage(c,b.x,b.y,b.w,b.h,Math.round(p*s),Math.round(p*s),Math.round(b.w*s),Math.round(b.h*s));SIGP=o.toDataURL('image/png');
+   modal(`<h3>Use this signature?</h3><p class="mut sm">Shape detected: ${q.toFixed(1)}:1. The background was removed and the image trimmed. It applies only to plans you approve from now on.</p><div class="sigp" style="display:block;text-align:center"><img style="height:90px;max-width:100%;margin:auto;object-fit:contain" src="${SIGP}" alt="Signature preview"></div><div class="act2"><button class="b" onclick="closeM()">Cancel</button><button class="b p" onclick="useSig()">Use signature</button></div>`)};im.src=r.result};r.readAsDataURL(f)}
+
+function fx(){const t=$('.top');if(t)t.classList.toggle('sc',scrollY>8)}
+function render(){const old=[...document.querySelectorAll('.bt.on,.sb.on')].map(b=>b.getBoundingClientRect()),an=S.a,had=!!$('.top');render0();
+ if(!me){fx();return}const app=$('#app');
+ [...document.querySelectorAll('.bt.on,.sb.on')].forEach((b,i)=>{const p=document.createElement('i');p.className='pill';b.prepend(p);const o=old[i];if(o&&o.width&&had&&!RM&&p.animate){const n=b.getBoundingClientRect(),dx=o.left-n.left,dy=o.top-n.top;if(dx||dy)p.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'none'}],{duration:560,easing:'cubic-bezier(.3,1.35,.5,1)'})}});
+ if(!had){app.classList.add('shell');setTimeout(()=>app.classList.remove('shell'),1100)}
+ if(an){const h=$('.top h2');if(h)h.classList.add('sw');reveal();countUp();app.classList.add('nvg');setTimeout(()=>app.classList.remove('nvg'),700)}
+ fx()}
+function countUp(){if(RM)return;document.querySelectorAll('.st b').forEach(b=>{const n=+b.textContent;if(!n)return;const t0=performance.now();b.textContent=0;(function f(t){const k=Math.min(1,(t-t0)/800);b.textContent=Math.round(n*(1-Math.pow(1-k,4)));if(k<1)requestAnimationFrame(f)})(t0)})}
+let IO;function reveal(){if(IO)IO.disconnect();if(RM||!window.IntersectionObserver)return;
+ IO=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const t=e.target,d=+t.dataset.d||0;IO.unobserve(t);setTimeout(()=>{t.classList.add('vis');setTimeout(()=>t.classList.remove('rv','vis'),950)},d)}),{threshold:.06,rootMargin:'0px 0px -4% 0px'});
+ document.querySelectorAll('.pg>*:not(.gr):not(.sg4),.pg .gr>*,.pg .sg4>*,.pg .fg>*,.pg .sd>*,.pg .ml>*').forEach((t,i)=>{t.classList.add('rv');t.dataset.d=(i%7)*60;IO.observe(t)})}
+function tab(t){S.tab=t;const b=$('.tabs');b.dataset.t=t;b.querySelectorAll('button').forEach((x,i)=>x.classList.toggle('on',(i==0)==(t=='principal')));}
+document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.closest('.b,.ch,.tabs button,.pc,.mi,.bt,.sb');if(!t||t.disabled||RM)return;const r=t.getBoundingClientRect(),d=Math.max(r.width,r.height)*2.2,s=document.createElement('span');s.className='rp';s.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;t.append(s);setTimeout(()=>s.remove(),720)},{passive:true});
+let tk=0;addEventListener('scroll',()=>{if(tk)return;tk=1;requestAnimationFrame(()=>{tk=0;const b=$('#bg');if(b&&!RM)b.style.transform=`translate3d(0,${Math.max(-scrollY*.08,-160).toFixed(1)}px,0)`;fx()})},{passive:true});
+function setup(on){S.setup=on;const f=$('.lc');if(!f){render();return}f.outerHTML=login().match(/<form[\s\S]*<\/form>/)[0]}
+function setupForm(){return `<form class="c lc" onsubmit="return doSetup(event)"><h2>Set up your school</h2><p class="mut sm" style="margin:2px 0 0">Create the school and the Principal account.</p><div class="fg" style="grid-template-columns:1fr"><label class="f"><span>School name</span><input id="sn" required></label><label class="f"><span>School code (teachers sign in with it)</span><input id="sc" required maxlength="10" autocapitalize="characters"></label><label class="f"><span>Address</span><input id="sa" required></label><label class="f"><span>Principal name</span><input id="pn" required></label><label class="f"><span>Principal email</span><input id="pe" type="email" required autocomplete="username"></label><label class="f"><span>Password (8+ characters)</span><input id="pp" type="password" minlength="8" required autocomplete="new-password"></label></div><button class="b p wide" id="lbtn">Create school</button><p class="sm" style="margin:14px 0 0;text-align:center"><button type="button" class="lk" onclick="setup(0)">← Back to sign in</button></p></form>`}
+async function doSetup(e){e.preventDefault();const g=i=>$('#'+i).value.trim(),b=$('#lbtn'),em=g('pe').toLowerCase(),pw=$('#pp').value,bad=m=>{b.disabled=0;b.textContent='Create school';toast(m,'err')};
+ if(!sb){bad('Cannot reach the server. Check your connection.');return false}
+ b.disabled=1;b.textContent='Creating…';
+ let {data,error}=await sb.auth.signUp({email:em,password:pw});
+ if(error&&/already/i.test(error.message)){const r=await sb.auth.signInWithPassword({email:em,password:pw});if(r.error){bad('That email already has an account. Sign in instead.');return false}data={session:r.data.session};error=null}
+ if(error){bad(error.message);return false}
+ try{localStorage.setItem('lessoner_pending',JSON.stringify({email:em,code:g('sc').toUpperCase(),name:g('sn'),addr:g('sa'),pn:g('pn')}))}catch(x){}
+ if(!data.session){S.setup=0;render();toast('Check your email to confirm, then sign in as Principal.','ok');return false}
+ try{await finishSetup();await hydrate()}catch(x){bad(/duplicate|unique/i.test(x.message||'')?'That school code is already taken.':(x.message||'Setup failed'));return false}
+ S.setup=0;S.v='school';S.a=1;render();toast('School created. Upload your signature next.','ok');return false}
+
+function chPw(f){modal(`<h3>${f?'Set a new password':'Change password'}</h3>${f?'<p class="mut sm">You signed in with a temporary password. Choose your own to continue.</p>':''}<div class="fg" style="grid-template-columns:1fr"><label class="f"><span>New password (8+ characters)</span><input id="np" type="password" autocomplete="new-password"></label></div><small class="err" id="pe2"></small><div class="act2">${f?'':'<button class="b" onclick="closeM()">Cancel</button>'}<button class="b p" onclick="savePw()">Save password</button></div>`)}
+async function savePw(){const v=$('#np').value,er=$('#pe2');if(v.length<8){er.textContent='Use at least 8 characters.';er.style.display='block';return}const {error}=await sb.auth.updateUser({password:v});if(error){er.textContent=error.message;er.style.display='block';return}if(me.must){await sb.from('profiles').update({must_change_password:false}).eq('id',me.id);delete me.must}closeM();toast('Password updated','ok')}
+
+function acct(){modal(`<h3>${E(me.name)}</h3><p class="mut sm">${E(me.email)}</p><div class="act2"><button class="b" onclick="chPw()">Change password</button><button class="b p" onclick="closeM();logout()">Sign out</button></div>`)}
+function tpModal(n,tp){modal(`<h3>Temporary password</h3><p class="mut sm">Share this with ${E(n)}. It is shown only once, and they must change it at first sign-in.</p><div class="sigp" style="display:block;text-align:center"><b style="font-size:22px;letter-spacing:.08em;user-select:all">${tp}</b></div><div class="act2"><button class="b p" onclick="closeM();render()">Done</button></div>`)}
+function resetT(id){confirmD('Reset password?','A new temporary password will be generated for this teacher.','Reset',async()=>{const u=db.users.find(x=>x.id==id),r=await fn({action:'reset',id});if(r.error){toast(r.error,'err');return}tpModal(u.name,r.tempPassword)})}
+
+function bk(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db)],{type:'application/json'}));a.download='lessoner-backup-'+now().slice(0,10)+'.json';a.click();toast('Backup downloaded','ok')}
+function rst(i){const f=i.files[0];i.value='';if(!f)return;f.text().then(t=>{let d;try{d=JSON.parse(t)}catch(e){}if(!d||!d.school||!Array.isArray(d.users)||!Array.isArray(d.plans)){toast('That is not a Lessoner backup','err');return}confirmD('Restore this backup?','This replaces all data on this device.','Restore',()=>{d.mails=d.mails||[];db=d;S.setup=0;save();me=db.users.find(u=>u.id==(me&&me.id));if(!me)try{localStorage.removeItem(SK)}catch(x){}render();toast('Backup restored','ok')})})}
+addEventListener('pointermove',e=>{const l=$('.lg');if(!l||RM||e.pointerType=='touch')return;l.style.setProperty('--px',(e.clientX/innerWidth-.5).toFixed(3));l.style.setProperty('--py',(e.clientY/innerHeight-.5).toFixed(3))},{passive:true});
+addEventListener('pointermove',e=>{if(e.pointerType=='touch'||RM)return;const c=e.target.closest&&e.target.closest('.c');if(!c)return;const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')},{passive:true});
+/* ===== Lessoner cloud (Supabase) ===== */
+const SB_URL='https://gqxwnabohacpbdcybxev.supabase.co',SB_KEY='sb_publishable_Pz5plLc0FncUi0gh1vLEDw_Gzfdc-ye';
+const sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY):null;let RT=0,RT2;
+async function hydrate(){
+ const ss=(await sb.auth.getSession()).data.session;if(!ss)throw new Error('No session');
+ const [s,pr,pl,ml]=await Promise.all([sb.from('schools').select('*').single(),sb.from('profiles').select('*'),sb.from('plans').select('*,plan_versions(v,at,note,f)').order('created_at'),sb.from('mails').select('*').order('created_at')]);
+ const er=s.error||pr.error||pl.error||ml.error;if(er)throw er;
+ const loc=db.plans.filter(p=>!p.uid&&me&&p.t==me.id),sc=s.data;
+ db={school:{id:sc.id,code:sc.code,name:sc.name,addr:sc.addr,sig:sc.sig||''},n:1,
+  users:pr.data.map(u=>({id:u.id,role:u.role,name:u.name,email:u.email,subject:u.subject,must:u.must_change_password})),
+  plans:pl.data.map(p=>({uid:p.id,id:p.ref,t:p.teacher_id,tn:p.teacher_name,f:p.f,status:p.status,reason:p.reason,approval:p.approval,updated:p.updated_at,versions:(p.plan_versions||[]).sort((a,b)=>a.v-b.v)})),
+  mails:ml.data.map(m=>({id:m.id,to:m.to_user,subject:m.subject,body:m.body,pid:(pl.data.find(p=>p.id==m.plan_id)||{}).ref,read:m.read,at:m.created_at}))};
+ db.plans.push(...loc);me=db.users.find(u=>u.id==ss.user.id)||null;
+ if(!RT&&me){RT=1;const d=()=>{clearTimeout(RT2);RT2=setTimeout(()=>{if(S.v!='form')refresh()},500)};sb.channel('lessoner').on('postgres_changes',{event:'*',schema:'public',table:'plans'},d).on('postgres_changes',{event:'*',schema:'public',table:'mails'},d).subscribe()}}
+async function refresh(f){try{await hydrate()}catch(e){return}if(f||S.v!='form')render()}
+function push(p,x){p.q=(p.q||Promise.resolve()).then(async()=>{if(!p.uid){const {data,error}=await sb.from('plans').insert({school_id:db.school.id,teacher_id:me.id,f:p.f,status:'draft'}).select('id,ref').single();if(error)throw error;const o=p.id;p.uid=data.id;p.id=data.ref;if(S.id==o)S.id=p.id}const {error}=await sb.from('plans').update({f:p.f,...(x||{})}).eq('id',p.uid);if(error)throw error}).catch(e=>toast('Could not save: '+(e.message||'network error'),'err'));return p.q}
+async function fn(b){const {data,error}=await sb.functions.invoke('manage-teacher',{body:b});if(error){let m='Request failed. Check your connection.';try{m=(await error.context.json()).error||m}catch(x){}return{error:m}}return data}
+async function finishSetup(){let p=null;try{p=JSON.parse(localStorage.getItem('lessoner_pending')||'null')}catch(x){}const u=(await sb.auth.getSession()).data.session;if(!p||!u||p.email!=u.user.email)return false;
+ const {data:sid,error}=await sb.rpc('setup_school',{p_code:p.code,p_name:p.name,p_addr:p.addr,p_principal:p.pn});if(error)throw error;
+ await sb.from('schools').update({sig:sigSVG(E(p.pn.replace('Dr. ','')))}).eq('id',sid);try{localStorage.removeItem('lessoner_pending')}catch(x){}return true}
+async function typedSig(){const g=sigSVG(E(me.name.replace('Dr. ','')));const {error}=await sb.from('schools').update({sig:g}).eq('id',db.school.id);if(error){toast(error.message,'err');return}db.school.sig=g;render();toast('Typed-name signature applied','ok')}
+async function boot(){db=seed();me=null;if(sb){try{if((await sb.auth.getSession()).data.session){await hydrate();S.v='dash';S.a=1}}catch(e){db=seed();me=null}}render();if(me&&me.must)chPw(1)}
+boot();
+</script></body></html>
